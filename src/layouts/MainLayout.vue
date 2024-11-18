@@ -40,13 +40,13 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
 defineOptions({
@@ -60,18 +60,24 @@ const linksList = [
     icon: 'school',
     link: '/page1'
   },
-{
+  {
     title: 'Region Standard',
     caption: 'quasar.dev',
     icon: 'school',
     link: '/region-standard'
+  },
+{
+    title: 'Region Flex',
+    caption: 'quasar.dev',
+    icon: 'school',
+    link: '/region-flex'
   },
 
 ]
 
 const leftDrawerOpen = ref(false)
 
-function toggleLeftDrawer () {
+function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>

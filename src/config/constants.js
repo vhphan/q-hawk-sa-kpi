@@ -14,4 +14,14 @@ export const availableRegions = [
   'SOUTHERN',
   "SABAH",
   "SARAWAK",
-]
+];
+
+export const mobileOperators = [
+    'Celcom',
+    'Maxis',
+    'Digi',
+    'Umobile',
+    'YTL',
+    'TM',
+    // 'DNB'
+];

@@ -10,10 +10,12 @@
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
-    "build": "quasar build"
+    "build": "quasar build",
+    "backend": "ssh hawk -L 8009:localhost:8009"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
+    "@vueuse/core": "^11.2.0",
     "axios": "^1.7.7",
     "date-fns-tz": "^3.2.0",
     "echarts": "^5.5.1",

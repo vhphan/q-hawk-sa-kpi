@@ -11,12 +11,14 @@ import 'echarts/theme/dark-fresh-cut';
 import 'echarts/theme/inspired';
 import {yAxisLabelFormatter} from "components/viz/utils";
 import {timeZone} from "src/config/constants";
+import {storeToRefs} from "pinia";
+import {useKpiStore} from "stores/kpiStore";
 
 use([CanvasRenderer, LineChart, GridComponent, TooltipComponent, TitleComponent, DataZoomComponent]);
 
 const props = defineProps({
   data: {
-    type: Array,
+    type: Object,
     required: true,
   },
   seriesName: {
@@ -51,21 +53,35 @@ const props = defineProps({
 
 const chartRef = ref(null);
 
+const kpiStore = useKpiStore();
+const {selectedOperators, colorMapping} = storeToRefs(kpiStore);
+
+const sortData = (data) => {
+  return data.map(item => [new Date(item[0]), item[1]]).sort((a, b) => a[0] - b[0]);
+};
 const getSeries = () => {
-  if (!props.data || !props.data.map) {
-    return [];
-  }
-
-  const sortedData = props.data.map(item => [new Date(item[0]), item[1]]).sort((a, b) => a[0] - b[0]);
-
-  return [{
-    data: sortedData,
-    type: 'line',
-    name: props.seriesName || 'Series',
-  }];
+  // props.data is an object with keys=mno, filter only keys that are in selectedOperators
+  const filteredData = selectedOperators.value.reduce((acc, operator) => {
+    if (props.data[operator]) {
+      acc[operator] = sortData(props.data[operator]);
+    }
+    return acc;
+  }, {});
+//
+  return Object.keys(filteredData).map(operator => {
+    return {
+      data: filteredData[operator],
+      type: 'line',
+      name: operator,
+      lineStyle: {
+        color: colorMapping.value[operator],
+      },
+    };
+  });
 };
 
 const getOption = () => {
+
   const result = ({
       title: {
         text: props.seriesName || 'Series',

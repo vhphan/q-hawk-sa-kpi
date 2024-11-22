@@ -87,11 +87,25 @@ const getOption = () => {
       },
       series: getSeries(),
       dataZoom: [
+        // {
+        //   type: 'slider',
+        //   show: true,
+        //   start: 0,
+        //   end: 100,
+        // }
         {
-          type: 'slider',
-          show: true,
-          start: 0,
-          end: 100,
+            id: 'dataZoomX',
+            type: 'slider',
+            xAxisIndex: [0],
+            filterMode: 'filter',
+          start:50,
+          end:100
+        },
+        {
+            id: 'dataZoomY',
+            type: 'slider',
+            yAxisIndex: [0],
+            filterMode: 'empty'
         }
       ],
       tooltip: {
@@ -133,6 +147,11 @@ watch(chartRef, (newVal) => {
   connect(props.connectName || props.timeUnit);
 
 }, {immediate: true});
+
+// watch(props.data, () => {
+//   if (!chartRef.value) return;
+//   chartRef.value.setOption(getOption());
+// }, {deep: true});
 
 </script>
 

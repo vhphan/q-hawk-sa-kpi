@@ -25,17 +25,25 @@
       bordered
     >
       <q-list>
-        <q-item-label
-          header
-        >
+        <q-item-label header>
           Essential Links
         </q-item-label>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
+        <q-expansion-item label="Daily" icon="calendar_today" default-opened>
+          <q-item v-for="link in dailyLinks" :key="link.title" indent>
+            <EssentialLink v-bind="link" />
+          </q-item>
+        </q-expansion-item>
+        <q-expansion-item label="Hourly" icon="schedule" default-opened>
+          <q-item v-for="link in hourlyLinks" :key="link.title" indent>
+            <EssentialLink v-bind="link" />
+          </q-item>
+        </q-expansion-item>
+        <q-expansion-item label="Test" icon="schedule" default-opened>
+          <q-item v-for="link in testLinks" :key="link.title" indent>
+            <EssentialLink v-bind="link" />
+          </q-item>
+        </q-expansion-item>
       </q-list>
     </q-drawer>
 
@@ -53,27 +61,45 @@ defineOptions({
   name: 'MainLayout'
 })
 
-const linksList = [
-  {
-    title: 'Page 1',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: '/page1'
-  },
+const dailyLinks = [
   {
     title: 'Region Standard',
-    caption: 'quasar.dev',
+    caption: '',
     icon: 'school',
     link: '/region-standard'
   },
-{
+  {
     title: 'Region Flex',
-    caption: 'quasar.dev',
+    caption: '',
     icon: 'school',
     link: '/region-flex'
   },
+];
 
-]
+const hourlyLinks = [
+  {
+    title: 'Region Standard',
+    caption: '',
+    icon: 'school',
+    link: '/region-standard-hourly'
+  },
+  {
+    title: 'Region Flex',
+    caption: '',
+    icon: 'school',
+    link: '/region-flex-hourly'
+  },
+];
+
+const testLinks = [
+  {
+    title: 'Test',
+    caption: '',
+    icon: 'school',
+    link: '/page-one'
+  },
+];
+
 
 const leftDrawerOpen = ref(false)
 
@@ -81,3 +107,10 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>
+
+<style>
+.router-link-active {
+  background-color: #a2a2a2;
+}
+
+</style>

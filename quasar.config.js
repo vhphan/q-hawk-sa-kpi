@@ -110,6 +110,7 @@ module.exports = configure(function (/* ctx */) {
       config: {
         loading: {
           spinner: 'QSpinnerGears',
+          spinnerSize: 240,
         }
       },
 

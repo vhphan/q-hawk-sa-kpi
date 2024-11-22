@@ -1,9 +1,10 @@
 import axios from 'axios';
 import {ref} from "vue";
 
-import {Loading, Notify} from 'quasar';
+import {Loading} from 'quasar';
 
 import {apiTimeoutInMs} from "src/config/constants";
+import {triggerNegative} from "src/plugins/notify";
 
 const PROD = import.meta.env.PROD;
 
@@ -12,16 +13,6 @@ export function getBaseUrl() {
     return import.meta.env.VITE_API_URL_PROD;
   }
   return import.meta.env.VITE_API_URL_DEV;
-}
-
-const triggerNegative = function (opts = {}) {
-  Notify.create({
-    ...{
-      type: 'negative',
-      message: 'Oops! Something went wrong',
-      position: 'center'
-    }, ...opts
-  });
 }
 
 export class MyFetch {

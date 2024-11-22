@@ -3,6 +3,7 @@
 </template>
 
 <script setup>
+import 'src/monkeyPatch';
 import {onMounted} from "vue";
 import {useKpiStore} from "stores/kpiStore";
 
@@ -11,11 +12,14 @@ defineOptions({
 });
 
 const kpiStore = useKpiStore();
+
 onMounted(async () => {
   console.log('App mounted');
   await Promise.all([
     kpiStore.getRegionsStandardKpi(),
-    kpiStore.getRegionsFlexKpi()
+    kpiStore.getRegionsFlexKpi(),
+    kpiStore.getRegionsStandardKpiHourly(),
+    kpiStore.getRegionsFlexKpiHourly(),
   ]);
 });
 

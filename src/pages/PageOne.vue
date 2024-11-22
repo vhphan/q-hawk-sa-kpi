@@ -1,11 +1,11 @@
 <script setup>
 
+import CellSelector from "components/viz/CellSelector.vue";
+import CellCharts from "pages/CellCharts.vue";
 </script>
 
 <template>
-  <div class="flex flex-center">
-    <h1>Page1</h1>
-  </div>
+    <cell-charts/>
 </template>
 
 <style scoped>

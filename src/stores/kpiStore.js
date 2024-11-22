@@ -8,8 +8,18 @@ export const useKpiStore = defineStore("kpi", {
   state: () => ({
     standardKpi: {},
     flexKpi: {},
+    standardKpiCells: {},
+    flexKpiCells: {},
+
+    standardKpiHourly: {},
+    flexKpiHourly: {},
+    standardKpiCellsHourly: {},
+    flexKpiCellsHourly: {},
+
+
     selectedTech: 'nr',
     selectedRegion: 'ALL',
+    selectedCell: '',
     colorMapping: useLocalStorage('colorMapping', {
       'Maxis': '#72fa05',
       'Celcom': '#37ffd4',
@@ -23,20 +33,68 @@ export const useKpiStore = defineStore("kpi", {
 
   }),
   actions: {
+
     async getRegionsStandardKpi() {
-      const results = await api().get(endPoints.standardKpi.regions);
-      if (results.error || !results.status === 200) {
-        return;
-      }
-      this.standardKpi = results.data.data;
+      const {data, error, status} = await api().get(endPoints.daily.standardKpi.regions);
+      if (error || status !== 200) return;
+      this.standardKpi = data.data;
     },
+
     async getRegionsFlexKpi() {
-      const results = await api().get(endPoints.flexKpi.regions);
-      if (results.error || !results.status === 200) {
-        return;
-      }
-      this.flexKpi = results.data.data;
+      const {data, error, status} = await api().get(endPoints.daily.flexKpi.regions);
+      if (error || status !== 200) return;
+      this.flexKpi = data.data;
     },
+
+    async getRegionsStandardKpiHourly() {
+      const {data, error, status} = await api().get(endPoints.hourly.standardKpi.regions);
+      if (error || status !== 200) return;
+      this.standardKpiHourly = data.data;
+    },
+
+    async getRegionsFlexKpiHourly() {
+      const {data, error, status} = await api().get(endPoints.hourly.flexKpi.regions);
+      if (error || status !== 200) return;
+      this.flexKpiHourly = data.data;
+    },
+
+    async getCellsStandardKpi() {
+      const {data, error, status} = await api().post(endPoints.daily.standardKpi.cells, {
+          cells: [this.selectedCell],
+        }
+      );
+      if (error || status !== 200) return;
+      this.standardKpiCells = data.data;
+    },
+
+    async getCellsFlexKpi() {
+      const {data, error, status} = await api().post(endPoints.daily.flexKpi.cells, {
+          cells: [this.selectedCell],
+        }
+      );
+      if (error || status !== 200) return;
+      this.flexKpiCells = data.data;
+    },
+
+    async getCellsStandardKpiHourly() {
+      const {data, error, status} = await api().post(endPoints.hourly.standardKpi.cells, {
+          cells: [this.selectedCell],
+        }
+      );
+      if (error || status !== 200) return;
+      this.standardKpiCellsHourly = data.data;
+    },
+
+    async getCellsFlexKpiHourly() {
+      const {data, error, status} = await api().post(endPoints.hourly.flexKpi.cells, {
+          cells: [this.selectedCell],
+        }
+      );
+      if (error || status !== 200) return;
+      this.flexKpiCellsHourly = data.data;
+    },
+
+
 
 
   }

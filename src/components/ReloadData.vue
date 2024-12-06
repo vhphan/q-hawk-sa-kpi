@@ -1,6 +1,7 @@
 <script setup>
 import {computed, defineProps} from 'vue';
 import {useKpiStore} from "stores/kpiStore";
+import {useKpiActions} from "src/composables/useKpiActions";
 
 const props = defineProps({
   kpiType: {
@@ -25,53 +26,13 @@ const props = defineProps({
 })
 
 const kpiStore = useKpiStore();
-const action = computed(() => {
-  const {kpiType, timeUnit, level} = props;
-  if (level === 'cell') {
-    const actions = {
-      standard: {
-        daily: kpiStore.getCellsStandardKpi,
-        hourly: kpiStore.getCellsStandardKpiHourly,
-      },
-      flex: {
-        daily: kpiStore.getCellsFlexKpi,
-        hourly: kpiStore.getCellsFlexKpiHourly,
-      },
-    };
 
-    if (actions[kpiType] && actions[kpiType][timeUnit]) {
-      return actions[kpiType][timeUnit];
-    } else {
-      throw new Error('Invalid kpiType or timeUnit');
-    }
-  }
 
-  if (level === 'region') {
-    const actions = {
-      standard: {
-        daily: kpiStore.getRegionsStandardKpi,
-        hourly: kpiStore.getRegionsStandardKpiHourly,
-      },
-      flex: {
-        daily: kpiStore.getRegionsFlexKpi,
-        hourly: kpiStore.getRegionsFlexKpiHourly,
-      },
-    };
-
-    if (actions[kpiType] && actions[kpiType][timeUnit]) {
-      return actions[kpiType][timeUnit];
-    } else {
-      throw new Error('Invalid kpiType or timeUnit');
-    }
-  }
-
-  throw new Error(`Invalid level: ${level}`);
-});
+const {action} = useKpiActions(props);
 
 const reload = async () => {
   await action.value();
-}
-
+};
 </script>
 
 <template>

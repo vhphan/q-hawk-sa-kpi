@@ -3,7 +3,7 @@ import {computed, ref, watch} from "vue";
 import {connect, use} from "echarts/core";
 import {CanvasRenderer} from "echarts/renderers";
 import {LineChart} from "echarts/charts";
-import {DataZoomComponent, GridComponent, TitleComponent, TooltipComponent} from "echarts/components";
+import {DataZoomComponent, GridComponent, LegendComponent, TitleComponent, TooltipComponent} from "echarts/components";
 import VChart from "vue-echarts";
 import 'echarts/theme/dark-bold';
 import 'echarts/theme/dark-digerati';
@@ -14,7 +14,11 @@ import {timeZone} from "src/config/constants";
 import {storeToRefs} from "pinia";
 import {useKpiStore} from "stores/kpiStore";
 
-use([CanvasRenderer, LineChart, GridComponent, TooltipComponent, TitleComponent, DataZoomComponent]);
+use([CanvasRenderer, LineChart, GridComponent,
+  TooltipComponent, TitleComponent, DataZoomComponent,
+  LegendComponent,
+
+]);
 
 const props = defineProps({
   data: {
@@ -76,6 +80,10 @@ const getSeries = () => {
       lineStyle: {
         color: colorMapping.value[operator],
       },
+      itemStyle: {
+        color: colorMapping.value[operator],
+      },
+
     };
   });
 };
@@ -85,6 +93,11 @@ const getOption = () => {
   const result = ({
       title: {
         text: props.seriesName || 'Series',
+      },
+      legend: {
+        // Try 'horizontal'
+        orient: 'horizontal',
+        top: '25px'
       },
 
       xAxis: {
@@ -103,19 +116,19 @@ const getOption = () => {
       },
       series: getSeries(),
       dataZoom: [
-       {
-            id: 'dataZoomX',
-            type: 'slider',
-            xAxisIndex: [0],
-            filterMode: 'filter',
-          start:50,
-          end:100
+        {
+          id: 'dataZoomX',
+          type: 'slider',
+          xAxisIndex: [0],
+          filterMode: 'filter',
+          start: 50,
+          end: 100
         },
         {
-            id: 'dataZoomY',
-            type: 'slider',
-            yAxisIndex: [0],
-            filterMode: 'empty'
+          id: 'dataZoomY',
+          type: 'slider',
+          yAxisIndex: [0],
+          filterMode: 'empty'
         }
       ],
       tooltip: {

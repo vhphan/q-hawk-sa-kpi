@@ -24,6 +24,25 @@ const routes = [
         }
       },
       {
+        path: 'cell-standard',
+        component: () => import('pages/CellCharts.vue'),
+        props: {
+          timeUnit: 'daily',
+          kpiType: 'standard',
+        }
+      },
+      {
+        path: 'cell-flex',
+        component: () => import('pages/CellCharts.vue'),
+        props: {
+          timeUnit: 'daily',
+          kpiType: 'flex',
+        }
+      },
+
+
+
+      {
         path: 'region-standard-hourly',
         component: () => import('pages/RegionCharts.vue'),
         props: {
@@ -39,6 +58,22 @@ const routes = [
           kpiType: 'flex',
         }
       },
+      {
+        path: 'cell-standard-hourly',
+        component: () => import('pages/CellCharts.vue'),
+        props: {
+          timeUnit: 'hourly',
+          kpiType: 'standard',
+        }
+      },
+      {
+        path: 'cell-flex-hourly',
+        component: () => import('pages/CellCharts.vue'),
+        props: {
+          timeUnit: 'hourly',
+          kpiType: 'flex',
+        }
+      }
     ]
   },
   {},

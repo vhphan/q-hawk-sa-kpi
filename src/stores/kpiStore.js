@@ -6,20 +6,38 @@ import {mobileOperators} from "src/config/constants";
 
 export const useKpiStore = defineStore("kpi", {
   state: () => ({
+
     standardKpi: {},
     flexKpi: {},
+
+    standardKpiCell: {},
+    standardKpiCellMeta: {},
+    flexKpiCell: {},
+    flexKpiCellMeta: {},
+
     standardKpiCells: {},
+    standardKpiCellsMeta: {},
     flexKpiCells: {},
+    flexKpiCellsMeta: {},
 
     standardKpiHourly: {},
     flexKpiHourly: {},
+
+    standardKpiCellHourly: {},
+    standardKpiCellHourlyMeta: {},
+    flexKpiCellHourly: {},
+    flexKpiCellHourlyMeta: {},
+
     standardKpiCellsHourly: {},
+    standardKpiCellsHourlyMeta: {},
     flexKpiCellsHourly: {},
+    flexKpiCellsHourlyMeta: {},
 
 
     selectedTech: 'nr',
-    selectedRegion: 'ALL',
-    selectedCell: '',
+    selectedRegion: useLocalStorage('selectedRegion', 'ALL'),
+    selectedCell: useLocalStorage('selectedCell', {}),
+    selectedCells: useLocalStorage('selectedCells', []),
     colorMapping: useLocalStorage('colorMapping', {
       'Maxis': '#72fa05',
       'Celcom': '#37ffd4',
@@ -58,43 +76,49 @@ export const useKpiStore = defineStore("kpi", {
       this.flexKpiHourly = data.data;
     },
 
-    async getCellsStandardKpi() {
+    async getCellsStandardKpi(singleCell) {
+      const cells = singleCell ? [this.selectedCell] : this.selectedCells;
       const {data, error, status} = await api().post(endPoints.daily.standardKpi.cells, {
-          cells: [this.selectedCell],
+          cells: cells.map(cell => cell.value),
         }
       );
       if (error || status !== 200) return;
-      this.standardKpiCells = data.data;
+      this[singleCell ? 'standardKpiCell' : 'standardKpiCells'] = data.data;
+      this[singleCell ? 'standardKpiCellMeta' : 'standardKpiCellsMeta'] = data.meta;
     },
 
-    async getCellsFlexKpi() {
+    async getCellsFlexKpi(singleCell) {
+      const cells = singleCell ? [this.selectedCell] : this.selectedCells;
       const {data, error, status} = await api().post(endPoints.daily.flexKpi.cells, {
-          cells: [this.selectedCell],
+          cells: cells.map(cell => cell.value),
         }
       );
       if (error || status !== 200) return;
-      this.flexKpiCells = data.data;
+      this[singleCell ? 'flexKpiCell' : 'flexKpiCells'] = data.data;
+      this[singleCell ? 'flexKpiCellMeta' : 'flexKpiCellsMeta'] = data.meta;
     },
 
-    async getCellsStandardKpiHourly() {
+    async getCellsStandardKpiHourly(singleCell) {
+      const cells = singleCell ? [this.selectedCell] : this.selectedCells;
       const {data, error, status} = await api().post(endPoints.hourly.standardKpi.cells, {
-          cells: [this.selectedCell],
+          cells: cells.map(cell => cell.value),
         }
       );
       if (error || status !== 200) return;
-      this.standardKpiCellsHourly = data.data;
+      this[singleCell ? 'standardKpiCellHourly' : 'standardKpiCellsHourly'] = data.data;
+      this[singleCell ? 'standardKpiCellHourlyMeta' : 'standardKpiCellsHourlyMeta'] = data.meta;
     },
 
-    async getCellsFlexKpiHourly() {
+    async getCellsFlexKpiHourly(singleCell) {
+      const cells = singleCell ? [this.selectedCell] : this.selectedCells;
       const {data, error, status} = await api().post(endPoints.hourly.flexKpi.cells, {
-          cells: [this.selectedCell],
+          cells: cells.map(cell => cell.value),
         }
       );
       if (error || status !== 200) return;
-      this.flexKpiCellsHourly = data.data;
+      this[singleCell ? 'flexKpiCellHourly' : 'flexKpiCellsHourly'] = data.data;
+      this[singleCell ? 'flexKpiCellHourlyMeta' : 'flexKpiCellsHourlyMeta'] = data.meta;
     },
-
-
 
 
   }

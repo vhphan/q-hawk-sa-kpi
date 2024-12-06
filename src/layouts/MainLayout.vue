@@ -1,7 +1,12 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
+    <q-header elevated
+:style="{
+  backgroundColor: isDevMode ? 'var(--q-negative)' : 'var(--q-primary)',
+}"
+    >
+      <q-toolbar
+      >
         <q-btn
           flat
           dense
@@ -12,10 +17,10 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          SA KPI Dashboard
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>v{{version}}</div>
       </q-toolbar>
     </q-header>
 
@@ -39,8 +44,11 @@
             <EssentialLink v-bind="link" />
           </q-item>
         </q-expansion-item>
-        <q-expansion-item label="Test" icon="schedule" default-opened>
-          <q-item v-for="link in testLinks" :key="link.title" indent>
+        <q-expansion-item label="Test" icon="schedule" default-opened
+            v-if="isDevMode"
+        >
+          <q-item
+            v-for="link in testLinks" :key="link.title" indent>
             <EssentialLink v-bind="link" />
           </q-item>
         </q-expansion-item>
@@ -54,12 +62,15 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
+import {ref} from 'vue';
+import EssentialLink from 'components/EssentialLink.vue';
+import packageJson from '../../package.json';
+const version = packageJson.version;
 defineOptions({
   name: 'MainLayout'
-})
+});
+
+const isDevMode = import.meta.env.DEV;
 
 const dailyLinks = [
   {
@@ -74,6 +85,18 @@ const dailyLinks = [
     icon: 'school',
     link: '/region-flex'
   },
+  // {
+  //   title: 'Cell Standard',
+  //   caption: '',
+  //   icon: 'school',
+  //   link: '/cell-standard'
+  // },
+  // {
+  //   title: 'Cell Flex',
+  //   caption: '',
+  //   icon: 'school',
+  //   link: '/cell-flex'
+  // },
 ];
 
 const hourlyLinks = [
@@ -88,6 +111,18 @@ const hourlyLinks = [
     caption: '',
     icon: 'school',
     link: '/region-flex-hourly'
+  },
+  {
+    title: 'Cell Standard',
+    caption: '',
+    icon: 'school',
+    link: '/cell-standard-hourly'
+  },
+  {
+    title: 'Cell Flex',
+    caption: '',
+    icon: 'school',
+    link: '/cell-flex-hourly'
   },
 ];
 

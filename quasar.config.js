@@ -52,6 +52,8 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+      publicPath: '/static/apps/hawk-sa-kpi/spa/',
+
 
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
@@ -78,6 +80,9 @@ module.exports = configure(function (/* ctx */) {
         // example: change the chunk size warning limit
         // viteConf.build = mergeConfig(viteConf.build, {
         //   chunkSizeWarningLimit: 750
+        // })
+        // viteConf.build = mergeConfig(viteConf.build, {
+        //   base: '/static/apps/hawk-sa-kpi/',
         // })
 
         // equivalent of following vite.config.js/vite.config.ts:

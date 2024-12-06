@@ -10,9 +10,9 @@ const PROD = import.meta.env.PROD;
 
 export function getBaseUrl() {
   if (PROD) {
-    return import.meta.env.VITE_API_URL_PROD;
-  }
-  return import.meta.env.VITE_API_URL_DEV;
+  return `${window.location.protocol}//${window.location.hostname}:${import.meta.env.VITE_API_PORT_PROD}`;
+}
+  return `${window.location.protocol}//${window.location.hostname}:${import.meta.env.VITE_API_PORT_DEV}`;
 }
 
 export class MyFetch {

@@ -20,6 +20,13 @@ onMounted(async () => {
     kpiStore.getRegionsFlexKpi(),
     kpiStore.getRegionsStandardKpiHourly(),
     kpiStore.getRegionsFlexKpiHourly(),
+
+    kpiStore.getRegionsStandardKpiByBand(),
+    kpiStore.getRegionsFlexKpiByBand(),
+    kpiStore.getRegionsStandardKpiHourlyByBand(),
+    kpiStore.getRegionsFlexKpiHourlyByBand(),
+
+
   ]);
 });
 

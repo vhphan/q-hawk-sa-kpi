@@ -1,32 +1,28 @@
 <script setup>
-import {computed, defineProps} from 'vue';
-import {useKpiStore} from "stores/kpiStore";
+import {defineProps} from 'vue';
 import {useKpiActions} from "src/composables/useKpiActions";
 
 const props = defineProps({
   kpiType: {
     type: String,
-    validator(value, props) {
+    validator(value) {
       return ['standard', 'flex'].includes(value);
     }
   },
   timeUnit: {
     type: String,
-    validator(value, props) {
+    validator(value) {
       return ['daily', 'hourly'].includes(value);
     }
   },
   level: {
     type: String,
     default: 'region',
-    validator(value, props) {
+    validator(value) {
       return ['region', 'cell'].includes(value);
     }
   }
 })
-
-const kpiStore = useKpiStore();
-
 
 const {action} = useKpiActions(props);
 

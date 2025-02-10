@@ -7,6 +7,7 @@ import MeLineChart from "components/viz/MeLineChart.vue";
 import MeLineChartMno from "components/viz/MeLineChartMno.vue";
 import MnoSelector from "components/viz/MnoSelector.vue";
 import ReloadData from "components/ReloadData.vue";
+import BandSelector from "components/viz/BandSelector.vue";
 
 
 const props = defineProps({
@@ -22,20 +23,42 @@ const props = defineProps({
 
 const kpiStore = useKpiStore();
 
-const {selectedRegion} = storeToRefs(kpiStore);
+const {selectedRegion, selectedBand} = storeToRefs(kpiStore);
 
 const kpiFromStore = computed(() => {
-  if (props.timeUnit === 'hourly') {
-    return props.kpiType === 'standard' ? kpiStore.standardKpiHourly : kpiStore.flexKpiHourly;
+  if (selectedBand.value === 'ALL') {
+    if (props.timeUnit === 'hourly') {
+      return props.kpiType === 'standard' ? kpiStore.standardKpiHourly : kpiStore.flexKpiHourly;
+    }
+    return props.kpiType === 'standard' ? kpiStore.standardKpi : kpiStore.flexKpi;
   }
-  return props.kpiType === 'standard' ? kpiStore.standardKpi : kpiStore.flexKpi;
+  if (props.timeUnit === 'hourly') {
+    return props.kpiType === 'standard' ? kpiStore.standardKpiHourlyByBand[selectedBand.value] : kpiStore.flexKpiHourlyByBand[selectedBand.value];
+  }
+  return props.kpiType === 'standard' ? kpiStore.standardKpiByBand[selectedBand.value] : kpiStore.flexKpiByBand[selectedBand.value];
 });
 
-const kpis = computed(() => Object.keys(kpiFromStore.value[selectedRegion.value] || {}).filter(kpi => kpi !== 'mno'));
+const kpis = computed(() => {
+  try {
+    return Object.keys(kpiFromStore.value[selectedRegion.value] || {}).filter(kpi => kpi !== 'mno' && kpi !== 'band');
+  } catch (e) {
+    return {};
+  }
+});
+
 // const {selectedTech} = storeToRefs(kpiStore);
 
 // const regionData = ref(kpiFromStore.value[selectedRegion.value] || {});
-const regionData = computed(() => kpiFromStore.value[selectedRegion.value] || {});
+const regionDataAllBand = computed(() => kpiFromStore.value[selectedRegion.value] || {});
+const regionDataSelectedBand = computed(() => kpiFromStore.value[selectedRegion.value] || {});
+
+const regionData = computed(() => {
+  if (selectedBand.value === 'ALL') {
+    return regionDataAllBand.value || {};
+  }
+  return regionDataSelectedBand.value || {};
+});
+
 
 // watch(selectedRegion, () => {
 //   console.log(`Region changed to: ${selectedRegion.value}`);
@@ -48,14 +71,18 @@ const regionData = computed(() => kpiFromStore.value[selectedRegion.value] || {}
 <template>
   <div class="row">
     <RegionSelector
-      class="col-12 col-sm-5 col-md-5"
+      class="col-12 col-sm-3 col-md-3"
     />
+    <BandSelector
+      class="col-12 col-sm-3 col-md-3"
+    />
+
     <mno-selector
-      class="col-12 col-sm-5 col-md-5"
+      class="col-12 col-sm-4 col-md-4"
       v-if="props.kpiType === 'flex'"
     />
     <reload-data
-      class="col-12 col-sm-2 col-md-1"
+      class="col-12 col-sm-1 col-md-1"
       :kpiType="props.kpiType"
       :timeUnit="props.timeUnit"
     />

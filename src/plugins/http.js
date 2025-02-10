@@ -44,7 +44,7 @@ export class MyFetch {
     try {
       this.isFetching.value = true;
       Loading.show();
-      const response = await this.axiosInstance[method](url, method === 'get' ? options : data, options);
+      const response = await this.axiosInstance[method](url, method === 'get' ? options : data,  options);
        return {
         error: null,
         data: response.data,
@@ -63,8 +63,8 @@ export class MyFetch {
     }
   }
 
-  async get(url, options = {}) {
-    return this.request('get', url, {}, options);
+  async get(url, data={}, options = {}) {
+    return this.request('get', url, data, options);
   }
 
   async post(url, data = {}, options = {}) {

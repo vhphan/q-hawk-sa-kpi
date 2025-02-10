@@ -6,6 +6,12 @@ export const availableTechs = [
   {label: 'LTE', value: 'lte'},
 ];
 
+export const availableBands = [
+  'ALL',
+  'N3',
+  'N7',
+]
+
 export const availableRegions = [
   'ALL',
   'CENTRAL',
@@ -24,4 +30,9 @@ export const mobileOperators = [
     'YTL',
     'TM',
     // 'DNB'
+];
+
+export const bands = [
+  'N3',
+  'N7',
 ];

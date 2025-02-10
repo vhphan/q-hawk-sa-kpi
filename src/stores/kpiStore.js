@@ -3,12 +3,22 @@ import {api} from "src/plugins/http";
 import {endPoints} from "src/config/endPoints";
 import {useLocalStorage} from "@vueuse/core";
 import {mobileOperators} from "src/config/constants";
+import {getResultsAllBands, reduceResults} from "stores/utils";
 
 export const useKpiStore = defineStore("kpi", {
   state: () => ({
 
     standardKpi: {},
     flexKpi: {},
+
+    standardKpiByBand: {},
+    flexKpiByBand: {},
+
+    standardKpiHourly: {},
+    flexKpiHourly: {},
+
+    standardKpiHourlyByBand: {},
+    flexKpiHourlyByBand: {},
 
     standardKpiCell: {},
     standardKpiCellMeta: {},
@@ -20,8 +30,6 @@ export const useKpiStore = defineStore("kpi", {
     flexKpiCells: {},
     flexKpiCellsMeta: {},
 
-    standardKpiHourly: {},
-    flexKpiHourly: {},
 
     standardKpiCellHourly: {},
     standardKpiCellHourlyMeta: {},
@@ -48,33 +56,66 @@ export const useKpiStore = defineStore("kpi", {
       'DNB': '#4992ff',
     }),
     selectedOperators: mobileOperators,
+    // selectedBand: useLocalStorage('selectedBand', 'ALL'),
+    selectedBand: 'ALL',
 
   }),
   actions: {
 
     async getRegionsStandardKpi() {
       const {data, error, status} = await api().get(endPoints.daily.standardKpi.regions);
-      if (error || status !== 200) return;
-      this.standardKpi = data.data;
+      if (!error && status === 200) {
+        this.standardKpi = data.data;
+      }
     },
 
     async getRegionsFlexKpi() {
       const {data, error, status} = await api().get(endPoints.daily.flexKpi.regions);
-      if (error || status !== 200) return;
-      this.flexKpi = data.data;
+      if (!error && status === 200) {
+        this.flexKpi = data.data;
+      }
     },
 
     async getRegionsStandardKpiHourly() {
-      const {data, error, status} = await api().get(endPoints.hourly.standardKpi.regions);
-      if (error || status !== 200) return;
-      this.standardKpiHourly = data.data;
+      const {data, error, status} = await api().get(endPoints.hourly.standardKpi.regions, {band: 'N3'});
+      if (!error && status === 200) {
+        this.standardKpiHourly = data.data;
+      }
     },
 
     async getRegionsFlexKpiHourly() {
       const {data, error, status} = await api().get(endPoints.hourly.flexKpi.regions);
-      if (error || status !== 200) return;
-      this.flexKpiHourly = data.data;
+      if (!error && status === 200) {
+        this.flexKpiHourly = data.data;
+      }
     },
+
+
+    async getRegionsStandardKpiByBand() {
+      const url = endPoints.daily.standardKpi.regions;
+      const results = await getResultsAllBands(url);
+      this.standardKpiByBand = reduceResults(results);
+    },
+
+    async getRegionsFlexKpiByBand() {
+      const url = endPoints.daily.flexKpi.regions;
+      const results = await getResultsAllBands(url);
+      this.flexKpiByBand = reduceResults(results);
+    },
+
+
+    async getRegionsStandardKpiHourlyByBand() {
+      const url = endPoints.hourly.standardKpi.regions;
+      const results = await getResultsAllBands(url);
+      this.standardKpiHourlyByBand = reduceResults(results);
+    },
+
+    async getRegionsFlexKpiHourlyByBand() {
+      const url = endPoints.hourly.flexKpi.regions;
+      const results = await getResultsAllBands(url);
+      this.flexKpiHourlyByBand = reduceResults(results);
+    },
+
 
     async getCellsStandardKpi(singleCell) {
       const cells = singleCell ? [this.selectedCell] : this.selectedCells;
@@ -119,7 +160,6 @@ export const useKpiStore = defineStore("kpi", {
       this[singleCell ? 'flexKpiCellHourly' : 'flexKpiCellsHourly'] = data.data;
       this[singleCell ? 'flexKpiCellHourlyMeta' : 'flexKpiCellsHourlyMeta'] = data.meta;
     },
-
 
   }
 });
